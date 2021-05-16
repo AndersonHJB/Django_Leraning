@@ -1,0 +1,58 @@
+Metadata-Version: 1.1
+Name: pipi
+Version: 1.0.1
+Summary: shortcut install & freeze pip packages
+Home-page: https://github.com/mehmetkose/pipi
+Author: Mehmet Kose
+Author-email: mehmet.py@gmail.com
+License: MIT
+Description: pipi
+        ====
+        
+        .. image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat
+           :alt: contributions welcome
+           :target: https://github.com/mehmetkose/pipi/
+        
+        shortcut install & freeze pip packages
+        
+        Installation
+        ~~~~~~~~~~~~
+        
+        ::
+        
+          pip install pipi
+        
+        
+        Usage
+        ~~~~~
+        
+        ::
+        
+            pipi install [package_name]
+            pipi i [package_name]
+            pipi install requests
+            pipi i requests
+        
+        every single operation works like:
+        
+        1. Create requirements.txt if not exists.
+        2. Try install the package if not installed.
+        3. Append package to the requirements.txt if the operation is successful.
+        
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.1
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides: pipi
