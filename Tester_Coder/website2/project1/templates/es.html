@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/static/web.css"/>
+
+<body>
+<div class="clear"></div>
+<div class="content">
+    <div class="content-01">
+        <div class="welcome">
+            <h2>索引建立和匹配查询系统</h2>
+        </div>
+        <div class="wel">
+            <ul>
+                <li class="li01"><a href="#"><p><input type="file" name="file" id="file_upload"></p></a>
+                    <input type="button" value="素材导入" onclick="FileUpload()">
+{#                    <a href="cunwancheng.html"> <input type="button" value="素材导入" onclick="FileUpload()"></a>#}
+                </li>
+                <li class="li02"><a href="#"><p><input type="file" name="file" id="file_upload"></p></a>
+                    <input type="button" value="匹配查询" onclick="FileUpload()">
+{#                    <a href="chawancheng.html"> <input type="button" value="素材导入" onclick="FileUpload()"></a>#}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+
+<div class="power">
+    <div class="power-05">
+        基于ElasticSearch的全页匹配方法设计前端页面
+    </div>
+</div>
+</head>
+</body>
+</html>
+
+<script src="/static/js/jquery-3.6.0.min.js"></script>
+<script>
+    function FileUpload() {
+        var form_data = new FormData();
+        var file_info = $('#file_upload')[0].files[0];
+        form_data.append('file', file_info);
+        $.ajax({
+            url: '/upload/',
+            type: 'POST',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            success: function (callback) {
+
+                console.log('ok')
+            }
+        });
+
+    }</script>
