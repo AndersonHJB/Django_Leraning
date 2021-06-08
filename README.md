@@ -466,7 +466,12 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
 
 ## 4.3 添加职位列表页模板 – 继承自 base.html
 
-父类「基类」创建好之后，我们来创建一个子模版：
+父类「基类」创建好之后，我们来创建一个子模版。
+
+- 这里使用 extends 指令来表示，这个模板继承自 `base.html` 模板
+    - Block content 里面重新定义了 content 这个块
+    - 变量：运行时会被替换， 变量用 `{{variable_name}}` 表示，变量是 views 层取到内容后 填充到模板中的参数
+    - Tag：控制模板的逻辑，包括 if, for, block 都是 tab
 
 
 
