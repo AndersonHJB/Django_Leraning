@@ -411,6 +411,8 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
 
 ![Page 12, object 111](README.assets/Page 12, object 111.png)
 
+![img](README.assets/1600333498911-938c947e-9f0b-4130-a8eb-9df38f4b052a.jpeg)
+
 接下来，我们为我们的匿名用户（候选人）添加两个页面。使之可以浏览我们的职位列表，和看到每个职位详情。
 
 ![image-20210608101930678](README.assets/image-20210608101930678.png)
