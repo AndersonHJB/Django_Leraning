@@ -464,6 +464,12 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
 
 
 
+## 4.3 添加职位列表页模板 – 继承自 base.html
+
+父类「基类」创建好之后，我们来创建一个子模版：
+
+
+
 
 
 
