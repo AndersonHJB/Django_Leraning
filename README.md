@@ -437,11 +437,15 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
     - 骨架模板里面可以定义 Block 块，每一个 Block 块都可以在继承的页面上重新定义/覆盖
     - 一个页面可以继承自另一个页面
 
+- 定义一个匿名访问页面的基础页面，基础页面中定义页头
+- 添加页面 `job/templates/base.html`
 
 
 
+## 4.2 Base 模板
 
-
+- 如下 `job/templates/base.html` 定义了站点的标题
+- 使用 block 指令定义了页面内容块，块的名称为 content，这个块可以在继承的页面中重新定义
 
 
 
