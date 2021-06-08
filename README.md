@@ -444,10 +444,23 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
 
 ## 4.2 Base 模板
 
+创建网站时，几乎都有一些所有网页都将包含的元素。（title、SEO 等）在这种情况下，可编写一个包含通用 元素的父模板，并让每个网页都继承这个模板，而不必在每个网页中重复定义这些通用元素。这 种方法能让你专注于开发每个网页的独特方面，还能让修改项目的整体外观容易得多。
+
 - 如下 `job/templates/base.html` 定义了站点的标题
 - 使用 block 指令定义了页面内容块，块的名称为 content，这个块可以在继承的页面中重新定义
 
+```html
+<!--job/templates/base.html-->
 
+<h1 style="margin:auto;width:50%;">AI悦创教育开放职位</h1>
+
+<p></p>
+
+{% block content %}
+{% endblock %}
+```
+
+![image-20210608115531974](README.assets/image-20210608115531974.png)
 
 
 
