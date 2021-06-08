@@ -409,7 +409,7 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
 
 # 4. 添加自定义页面：让匿名用户可以浏览职位列表页
 
-![Page 12, object 111](README.assets/Page 12, object 111.tiff)
+![Page 12, object 111](README.assets/Page 12, object 111.png)
 
 接下来，我们为我们的匿名用户（候选人）添加两个页面。使之可以浏览我们的职位列表，和看到每个职位详情。
 
