@@ -1,5 +1,9 @@
 # 1. 使用 Django 创建第一个项目
 
+框架的目标是要学会**要用**，这是最重要的！之后才是考虑进阶。
+
+
+
 ## 1.1 创建会议室管理项目，项目名为 meetingroom
 
 ```python
@@ -83,6 +87,8 @@ python manage.py createsuperuser
 | DATABASES          | 数据库引擎                                                   |
 | LANGUAGE_CODE      | 语言                                                         |
 
+**代码链接：**[https://github.com/AndersonHJB/Django_Leraning/tree/main/1-使用Django创建第一个项目](https://github.com/AndersonHJB/Django_Leraning/tree/main/1-使用Django创建第一个项目)
+
 
 
 # 2. 10分钟如何创建一个可以管理职位的后台
@@ -131,11 +137,11 @@ python manage.py createsuperuser
 python manage.py startapp jobs
 ```
 
-接下来，我们在项目的 settings.py 里面添加，这个 app：
+接下来，我们在项目的 `settings.py` 里面添加，这个 app：
 
 ![](README.assets/image-20210426171837607.png)
 
-接下来，在 app jobs 中的 models.py 里面，定义我们的职位模型。
+接下来，在 app jobs 中的 `models.py` 里面，定义我们的职位模型。官方的文档：[https://docs.djangoproject.com/zh-hans/3.2/ref/models/fields/](https://docs.djangoproject.com/zh-hans/3.2/ref/models/fields/)
 
 ```python
 from django.db import models
@@ -192,6 +198,8 @@ Quit the server with CONTROL-C.
 
 ![](README.assets/image-20210515143832853.png)
 
+**补充：** [Django 管理站点](https://docs.djangoproject.com/zh-hans/3.2/ref/contrib/admin/)：https://docs.djangoproject.com/zh-hans/3.2/ref/contrib/admin/
+
 这回我们看后台：
 
 ![](README.assets/image-20210515143906330.png)
@@ -200,12 +208,10 @@ Quit the server with CONTROL-C.
 
 ![](README.assets/image-20210515144800618.png)
 
-这是什么问题呢？
-
-就是数据库表还没有同步！
+**这是什么问题呢？** —— 就是数据库表还没有同步！
 
 ```python
-(djangoenv) ➜  recruitment git:(master) ✗ python manage.py migrate 
+(djangoenv) ➜  recruitment git:(master) ✗ python manage.py makemigrations 
 ```
 
 ```python
@@ -226,6 +232,8 @@ Quit the server with CONTROL-C.
 
 ![image-20210515150337226](README.assets/image-20210515150337226.png)
 
+
+
 ## demo 文本：
 
 | 名称          | 文本                                                         |
@@ -244,9 +252,248 @@ Quit the server with CONTROL-C.
 
 还有就是不太好的地方就是上图红色框中的名称，还是默认的并不是我们的职位名称。
 
+**代码链接：**[https://github.com/AndersonHJB/Django_Leraning/tree/main/2-10分钟如何创建一个可以管理职位的后台](https://github.com/AndersonHJB/Django_Leraning/tree/main/2-10分钟如何创建一个可以管理职位的后台)
+
 
 
 # 3. 产品体验优化：快速迭代完善应用
 
+## 3.1 添加默认值
+
 我们先把上门的尾巴先解决掉，添加默认值。「用户、日期」
+
+![image-20210516121840790](README.assets/image-20210516121840790.png)
+
+记得保存所修改的代码，接下来我刷新然后进去看看，点击添加按钮，看作者和日期是否会有默认时间。
+
+![](README.assets/image-20210516121937750.png)
+
+为了让你更好的理解，我将在加几个 default：
+
+```python
+from django.db import models
+from django.contrib.auth.models import User
+from datetime import datetime
+
+# Create your models here.
+
+JobTypes = [
+    (0, "技术类"),
+    (1, "产品类"),
+    (2, "运营类"),
+    (3, "设计类"),
+]
+
+Cities = [
+    (0, "北京"),
+    (1, "上海"),
+    (2, "深圳"),
+]
+
+
+# 每个字段都可以设置默认值，使用 default 就好。文本的值你也可以设置成默认的文本
+class Job(models.Model):
+    job_type = models.SmallIntegerField(blank=False, choices=JobTypes, verbose_name="职位类别", default=JobTypes[0])
+    job_name = models.CharField(max_length=250, blank=False, verbose_name="职位名称", default="填写职位名称")
+    job_city = models.SmallIntegerField(choices=Cities, blank=False, verbose_name="工作地点", default=Cities[0])
+    job_reponsibility = models.TextField(max_length=1024, verbose_name="职位职责", default="这里你可以填写你的职位职责")
+    job_requirement = models.TextField(max_length=1024, blank=False, verbose_name="职位要求", default="这里可以写你招聘的职位要求")
+    creator = models.ForeignKey(User, verbose_name="创建人", null=True, on_delete=models.SET_NULL, default=User)
+    created_date = models.DateTimeField(verbose_name="创建日期", default=datetime.now)
+    modified_date = models.DateTimeField(verbose_name="修改时间", default=datetime.now)
+```
+
+当然，我们不可能每一个都有默认，这肯定不合理，所以需要合理的安排。恢复成原来的代码：
+
+![](README.assets/image-20210522235055370.png)
+
+
+
+## 3.2 修改管理界面的显示
+
+默认生成了。接下来我们需要优化如下页面：
+
+![](README.assets/image-20210516122131800.png)
+
+明显很不直观，我们希望可以达到如下效果：
+
+![](README.assets/image-20210516122213933.png)
+
+我们直接修改该 app 下的 `admin.py` ：
+
+![](README.assets/image-20210516150802848.png)
+
+```python
+from django.contrib import admin
+from jobs.models import Job
+
+
+# Register your models here.
+
+class JobAdmin(admin.ModelAdmin):
+	list_display = ('job_name', 'job_type', 'job_city', 'creator', 'created_date',
+	                'modified_date')  # 在 ModelAdmin 中有特定含义的属性，当我们配置这个列表之后，列表页就会把这些字段展现出来。
+
+
+# 把 JobAdmin 注册到站点里面
+admin.site.register(Job, JobAdmin)
+# admin.site.register(Job)
+```
+
+效果：
+
+![image-20210516152117792](README.assets/image-20210516152117792.png)
+
+
+
+## 3.3 隐藏内容
+
+我们希望把下面的部分进行隐藏：
+
+![](README.assets/image-20210516152009157.png)
+
+添加如下代码即可：
+
+```python
+exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
+# fields = ('created_date', 'creator', 'modified_date')  # 选择想要显示的，而且其中元组的顺序也就是后台显示的顺序
+```
+
+![image-20210607171448463](README.assets/image-20210607171448463.png)
+
+接下来有个问题，我们把这些字段都隐藏了，那系统提交的时候是没有这些字段的。所以，我们可以使用如下方法：
+
+```python
+	def save_model(self, request, obj, form, change):
+		obj.creator = request.user
+		# 这里我们调用一下父类的方法：
+		super().save_model(request, obj, form, change)  # 来保存我们的对象
+```
+
+![image-20210607212600596](README.assets/image-20210607212600596.png)
+
+接下来我们可以看看，我们的修改的时间和创建人都没有了：
+
+![image-20210607213146181](README.assets/image-20210607213146181.png)
+
+
+
+
+
+
+
+## 3.4 再次添加一个新职位
+
+接下来，我们可以再添加一个职位：
+
+| 职位类别     | 技术类                                                       |
+| ------------ | ------------------------------------------------------------ |
+| **职位名称** | **Go高级后端开发工程师**                                     |
+| **工作地点** | **上海**                                                     |
+| **职位职责** | 1、参与与负责面向客户toB服务类（云平台）的产品研发及探索<br/>2、负责平台解决方案设计、性能优化<br/>3、积极跟进线上问题、持续推进平台可靠性、可用性优化 |
+| **职位要求** | 1. 熟练使用Go、Python中至少一门语言，3年及以上项目开发经验，掌握Java、C、C++者优先<br/>2. 熟悉常用的开发框架，具备性能调优经验者优先<br/>3. 熟练掌握常见存储中间件(Mysql、Redis、MongoDB、Kafka或RocketMq)<br/>4. 熟悉HTTP、TCP/IP等协议<br/>5. 熟练掌握多线程编程，有大型分布式、高并发、高可用系统设计开发经验优先<br/>6. 良好的编码规范，工作积极主动，心态开放，有强烈的责任心和良好的团队合作精神 |
+
+![image-20210607215013449](README.assets/image-20210607215013449.png)
+
+
+
+
+
+保存之后，我们就可以发现，可以正常显示了。
+
+![image-20210607215146586](README.assets/image-20210607215146586.png)
+
+本节代码：[https://github.com/AndersonHJB/Django_Leraning/tree/main/03-产品体验优化：快速迭代完善应用](https://github.com/AndersonHJB/Django_Leraning/tree/main/03-产品体验优化：快速迭代完善应用)
+
+
+
+# 4. 添加自定义页面：让匿名用户可以浏览职位列表页
+
+![Page 12, object 111](README.assets/2323.png)
+
+![img](README.assets/1600333498911-938c947e-9f0b-4130-a8eb-9df38f4b052a.jpeg)
+
+![img](README.assets/1600333499111-a64e5178-cf28-4321-a039-4cba76e058a5.png)
+
+接下来，我们为我们的匿名用户（候选人）添加两个页面。使之可以浏览我们的职位列表，和看到每个职位详情。
+
+![image-20210608101930678](README.assets/image-20210608101930678.png)
+
+- 列表页是独立页面，使用自定义的页面
+- 添加如下页面
+    - 职位列表页
+    - 职位详情页
+- 匿名用户可以访问
+
+
+
+## 4.1 Django 的自定义模板
+
+- Django 模板包含了输出的 HTML 页面的静态部分的内容
+- 模板里面的动态内容在运行时被替换
+- 在 views 里面指定每个 URL 使用哪个模板来渲染页面
+- 模版继承与块(Template Inheritance & Block)
+    - 模板继承允许定义一个骨架模板，骨架包含站点上的公共元素(如头部导航，尾部链接)
+    - 骨架模板里面可以定义 Block 块，每一个 Block 块都可以在继承的页面上重新定义/覆盖
+    - 一个页面可以继承自另一个页面
+
+- 定义一个匿名访问页面的基础页面，基础页面中定义页头
+- 添加页面 `job/templates/base.html`
+
+
+
+## 4.2 Base 模板
+
+创建网站时，几乎都有一些所有网页都将包含的元素。（title、SEO 等）在这种情况下，可编写一个包含通用 元素的父模板，并让每个网页都继承这个模板，而不必在每个网页中重复定义这些通用元素。这 种方法能让你专注于开发每个网页的独特方面，还能让修改项目的整体外观容易得多。
+
+- 如下 `job/templates/base.html` 定义了站点的标题
+- 使用 block 指令定义了页面内容块，块的名称为 content，这个块可以在继承的页面中重新定义
+
+```html
+<!--job/templates/base.html-->
+
+<h1 style="margin:auto;width:50%;">AI悦创教育开放职位</h1>
+
+<p></p>
+
+{% block content %}
+{% endblock %}
+```
+
+![image-20210608115531974](README.assets/image-20210608115531974.png)
+
+
+
+## 4.3 添加职位列表页模板 – 继承自 base.html
+
+父类「基类」创建好之后，我们来创建一个子模版。
+
+- 这里使用 extends 指令来表示，这个模板继承自 `base.html` 模板
+    - Block content 里面重新定义了 content 这个块
+    - 变量：运行时会被替换， 变量用 `{{variable_name}}` 表示，变量是 views 层取到内容后 填充到模板中的参数
+    - Tag：控制模板的逻辑，包括 if, for, block 都是 tab
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
