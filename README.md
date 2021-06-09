@@ -473,13 +473,44 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
     - 变量：运行时会被替换， 变量用 `{{variable_name}}` 表示，变量是 views 层取到内容后 填充到模板中的参数
     - Tag：控制模板的逻辑，包括 if, for, block 都是 tab
 
+```html
+{% extends 'base.html' %}
+
+{% block content %}
+终于等到你，期待加入我们，用技术去探索一个新世界
+
+{% if job_list %}
+    <ul>
+    {% for job in job_list %}
+        <li>{{job.type_name}} <a href="/job/{{ job.id }}/" style="color:blue">{{ job.job_name }}</a> {{job.city_name}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No jobs are available.</p>
+{% endif %}
+
+{% endblock %}
+```
+
+![image-20210609202257545](README.assets/image-20210609202257545.png)
+
+如果我去直接访问 [http://127.0.0.1:8000/joblist](http://127.0.0.1:8000/joblist)：会出现如下结果。
+
+![image-20210609203648778](README.assets/image-20210609203648778.png)
+
+显然，我们是访问不了。所以，我们需要定义路径。但定义路径之前我要把视图层把它加载进来。也就是把我们自定义的页面能够加进来。
+
+
+
+## 4.4 补充：Django shell
 
 
 
 
 
+## 4.5 views.py
 
-
+Django 的视图有几种方法，我们可以用函数去定义，也可以用视图的类去定义。这里我们先用函数定义 views 层里面：
 
 
 
