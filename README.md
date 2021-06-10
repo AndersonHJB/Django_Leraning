@@ -504,7 +504,21 @@ exclude = ('creator', 'created_date', 'modified_date')  # 隐藏不想显示的
 
 ## 4.4 补充：Django shell
 
-输入一些数据后，就可通过交互式终端会话以编程方式查看这些数据了。这种交互式环境称 为 Django shell，是测试项目和排除其故障的理想之地。下面是一个交互式 shell 会话示例:
+输入一些数据后，就可通过交互式终端会话以编程方式查看这些数据了。这种交互式环境称 为 Django shell，是测试项目和排除其故障的理想之地。下面是一个交互式 shell 会话示例：
+
+```python
+(djangoenv) ➜  recruitment git:(master) ✗ python manage.py shell
+Python 3.8.5 (default, Jul 21 2020, 10:42:08) 
+[Clang 11.0.0 (clang-1100.0.33.17)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from jobs.models import Job
+>>> Job.objects.all()
+<QuerySet [<Job: 音视频工程师>, <Job: Go高级后端开发工程师>]>
+>>> 
+```
+
+注意，这个地方如果想要返回 `<QuerySet [<Job: 音视频工程师>, <Job: Go高级后端开发工程师>]>` 则需要的
 
 
 
