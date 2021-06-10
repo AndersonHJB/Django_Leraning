@@ -527,7 +527,9 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ![image-20210610085225090](README.assets/image-20210610085225090.png)
 
-在活动的虚拟环境中执行时，命令 `python manage.py shell` 启动一个 Python 解释器，可使用它来探索存储在项目数据库中的数据。在这里，我们导入了模块 `jobs.models` 中的模型 Job，然后使用方法`Job.objects.all()` 来获取模型 Job 的所有实例;它返回的是一个
+在活动的虚拟环境中执行时，命令 `python manage.py shell` 启动一个 Python 解释器，可使用它来探索存储在项目数据库中的数据。在这里，我们导入了模块 `jobs.models` 中的模型 Job，然后使用方法`Job.objects.all()` 来获取模型 Job 的所有实例；它返回的是一个列表，称为查询集(queryset)。
+
+我们可以像遍历列表一样遍历查询集。下面演示了如何查看分配给每个主题对象的ID:
 
 
 
