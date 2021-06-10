@@ -529,11 +529,67 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 在活动的虚拟环境中执行时，命令 `python manage.py shell` 启动一个 Python 解释器，可使用它来探索存储在项目数据库中的数据。在这里，我们导入了模块 `jobs.models` 中的模型 Job，然后使用方法`Job.objects.all()` 来获取模型 Job 的所有实例；它返回的是一个列表，称为查询集(queryset)。
 
-我们可以像遍历列表一样遍历查询集。下面演示了如何查看分配给每个主题对象的ID:
+我们可以像遍历列表一样遍历查询集。下面演示了如何查看分配给每个主题对象的ID：
+
+```python
+>>> jobs = Job.objects.all()
+>>> for job in jobs:
+...     print(job.id, job)
+... 
+1 音视频工程师
+2 Go高级后端开发工程师
+>>> 
+```
+
+我们将返回的查询集存储在 jobs 中，然后打印每个主题的 id 属性和字符串表示。从输出可知，主题 **音视频工程师** 的 ID 为1，而 **Go高级后端开发工程师** 的 ID 为2。
+
+知道对象的 ID 后，就可获取该对象并查看其任何属性。下面来看看主题 **音视频工程师** 的属性 **job_reponsibility** 和 **job_requirement** 的值：
+
+```python
+>>> j = Job.objects.get(id=1)
+>>> j.
+j.DoesNotExist(                   j.get_previous_by_modified_date(
+j.MultipleObjectsReturned(        j.id
+j.check(                          j.job_city
+j.clean(                          j.job_name
+j.clean_fields(                   j.job_reponsibility
+j.created_date                    j.job_requirement
+j.creator                         j.job_type
+j.creator_id                      j.modified_date
+j.date_error_message(             j.objects
+j.delete(                         j.pk
+j.from_db(                        j.prepare_database_save(
+j.full_clean(                     j.refresh_from_db(
+j.get_deferred_fields(            j.save(
+j.get_job_city_display(           j.save_base(
+j.get_job_type_display(           j.serializable_value(
+j.get_next_by_created_date(       j.unique_error_message(
+j.get_next_by_modified_date(      j.validate_unique(
+j.get_previous_by_created_date(     
+>>> j.job_reponsibility
+'负责视频录制及编辑功能开发；\r\n负责图像处理算法的移动端实现以及优化；\r\n视频剪辑/滤镜决方案'
+>>> j.job_requirement
+'1、本科及以上学历，计算机、通信、电子、应用数学等相关专业毕业；\r\n2、具备音视频开发经一种或多种开发语言；\r\n4、良好的沟通和团队协作能力；\r\n5、有过Android或iOS产品开发经验者优先。\r\n投递：aiyuechuang@gmail.com'
+>>> 
+```
+
+**QuerySet API 参考**：[https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/](https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/)
+
+**注意：** 每次修改模型后，你都需要重启 shell，这样才能看到修改的效果。要退出 shell 会话，可 按 `Ctr + D` ；如果你使用的是 Windows 系统，应按 `Ctr + Z` ，再按回车键。
 
 
 
 ## 4.5 views.py
+
+**补充：**
+
+```python
+>>> job_list = Job.objects.order_by('job_type')
+>>> job_list[0]
+<Job: 音视频工程师>
+>>> job_list[0].job_city
+1
+```
 
 Django 的视图有几种方法，我们可以用函数去定义，也可以用视图的类去定义。这里我们先用函数定义 views 层里面： 
 
