@@ -518,13 +518,22 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> 
 ```
 
-注意，这个地方如果想要返回 `<QuerySet [<Job: 音视频工程师>, <Job: Go高级后端开发工程师>]>` 则需要的
+注意，这个地方如果想要返回 `<QuerySet [<Job: 音视频工程师>, <Job: Go高级后端开发工程师>]>` 则需要在 models 里面添加如下代码：
+
+```python
+    def __str__(self):
+        return self.job_name
+```
+
+![image-20210610085225090](README.assets/image-20210610085225090.png)
+
+在活动的虚拟环境中执行时，命令 `python manage.py shell` 启动一个 Python 解释器，可使用它来探索存储在项目数据库中的数据。在这里，我们导入了模块 `jobs.models` 中的模型 Job，然后使用方法`Job.objects.all()` 来获取模型 Job 的所有实例;它返回的是一个
 
 
 
 ## 4.5 views.py
 
-Django 的视图有几种方法，我们可以用函数去定义，也可以用视图的类去定义。这里我们先用函数定义 views 层里面：
+Django 的视图有几种方法，我们可以用函数去定义，也可以用视图的类去定义。这里我们先用函数定义 views 层里面： 
 
 
 
