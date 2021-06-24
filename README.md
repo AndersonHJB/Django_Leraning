@@ -647,15 +647,101 @@ urlpatterns = [
 ]
 ```
 
+```python
+# 比较好理解的方法
+from django.urls import path
+from . import views
+
+urlpatterns = [
+	path('joblist/', views.joblist, name='joblist'),
+]
+```
+
 接下来，我们来访问：[http://127.0.0.1:8000/joblist](http://127.0.0.1:8000/joblist) 发现还是不能访问，这是为什么呢？我们还没编写项目的 `urls.py`
 
 
 
 ## 4.7 编写项目 urls.py
 
+```python
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls import include, url
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+	path(r"", include("jobs.urls"))
+]
+```
+
+```python
+# 比较好理解的方法
+from django.contrib import admin
+from django.urls import path, include
+# from django.urls import include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+	path("", include("jobs.urls"))
+]
+```
+
+我们接下来，可以访问这个页面来查看一下。
+
+![image-20210624153803374](README.assets/image-20210624153803374.png)
 
 
 
+我们可以发现：
+
+1. 上图的红色框中，数据显示不正常；
+2. 缺少职位类别，表面我们上面写错了；
+
+我们去修改一下吧。
+
+```python
+<!--joblist.html-->
+{% extends 'base.html' %}
+<meta charset="UTF-8">
+{% block content %}
+终于等到你，期待加入我们，用技术去探索一个新世界
+
+{% if job_list %}
+    <ul>
+    {% for job in job_list %}
+        <li>{{job.job_type}} <a href="/job/{{ job.id }}/" style="color:blue">{{ job.job_name }}</a> {{job.city_name}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No jobs are available.</p>
+{% endif %}
+
+{% endblock %}
+```
+
+```python
+# views.py
+# Create your views here.
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template import loader
+
+from jobs.models import Job
+from jobs.models import Cities, JobTypes  # 因为这两个数据是 choice 来选择的，数据提取的时候只提取出了数字。
+
+
+def joblist(request):
+	# https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/#order-by
+	job_list = Job.objects.order_by('job_type')  # 从数据库获取，并且以 job_type 排序
+	template = loader.get_template('joblist.html')  # 加载模版
+	"""定义上下文——map"""
+	context = {'job_list': job_list}
+	for job in job_list:
+		"""因为，我们需要显示的数据是：工作地点、工作类型，但是我们的这两个数据都是由 choices 来实现选择的。所以，job.xxx 都是返回下标的「也就是数字」"""
+		job.city_name = Cities[job.job_city][1]  # 工作地点
+		job.job_type = JobTypes[job.job_type][1]  # 职位类别
+	return HttpResponse(template.render(context))
+```
 
 
 

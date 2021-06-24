@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+<meta charset="UTF-8">
+{% block content %}
+终于等到你，期待加入我们，用技术去探索一个新世界
+
+{% if job_list %}
+    <ul>
+    {% for job in job_list %}
+        <li>{{job.job_type}} <a href="/job/{{ job.id }}/" style="color:blue">{{ job.job_name }}</a> {{job.city_name}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No jobs are available.</p>
+{% endif %}
+
+{% endblock %}
