@@ -575,13 +575,29 @@ j.get_previous_by_created_date(
 
 **QuerySet API 参考**：[https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/](https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/)
 
-**注意：** 每次修改模型后，你都需要重启 shell，这样才能看到修改的效果。要退出 shell 会话，可 按 `Ctr + D` ；如果你使用的是 Windows 系统，应按 `Ctr + Z` ，再按回车键。
+**注意：** 每次修改模型后，你都需要重启 shell，这样才能看到修改的效果。要退出 shell 会话，可按 `Ctr + D` ；如果你使用的是 Windows 系统，应按 `Ctr + Z` ，再按回车键。
+
+**补充：**
+
+```python
+>>> from jobs.models import Job
+>>> Job.objects.all()
+<QuerySet [<Job: 音视频工程师>, <Job: Go高级后端开发工程师>]>
+>>> Job.objects.all()[0]
+<Job: 音视频工程师>
+>>> Job.objects.all()[0].job_type
+0
+>>> Job.objects.all()[0].job_name
+'音视频工程师'
+```
+
+
 
 
 
 ## 4.5 views.py
 
-**补充：**
+**补充：** [https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/#order-by](https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/#order-by)
 
 ```python
 >>> job_list = Job.objects.order_by('job_type')
@@ -592,6 +608,52 @@ j.get_previous_by_created_date(
 ```
 
 Django 的视图有几种方法，我们可以用函数去定义，也可以用视图的类去定义。这里我们先用函数定义 views 层里面： 
+
+```python
+# Create your views here.
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template import loader
+
+from jobs.models import Job
+from jobs.models import Cities, JobTypes # 因为这两个数据是 choice 来选择的，数据提取的时候只提取出了数字。
+
+def joblist(request):
+	# https://docs.djangoproject.com/zh-hans/3.2/ref/models/querysets/#order-by
+    job_list = Job.objects.order_by('job_type')  # 从数据库获取，并且以 job_type 排序
+    template = loader.get_template('joblist.html')  # 加载模版
+    """定义上下文——map"""
+    context = {'job_list': job_list}
+    for job in job_list:
+        """因为，我们需要显示的数据是：工作地点、工作类型，但是我们的这两个数据都是由 choices 来实现选择的。所以，job.xxx 都是返回下标的「也就是数字」"""
+        job.city_name = Cities[job.job_city]
+        job.job_type = JobTypes[job.job_type]
+    return HttpResponse(template.render(context))
+```
+
+
+
+## 4.6 添加 APP 的 urls.py
+
+到目前为止，我们的 app 进行了编写，接下来给我的 app 来写个路由。需要新建一个 `urls.py` 。
+
+```python
+from django.conf.urls import url
+from jobs import views
+
+urlpatterns = [
+	# 职位列表
+	url(r"^joblist/", views.joblist, name="joblist")
+]
+```
+
+接下来，我们来访问：[http://127.0.0.1:8000/joblist](http://127.0.0.1:8000/joblist) 发现还是不能访问，这是为什么呢？我们还没编写项目的 `urls.py`
+
+
+
+## 4.7 编写项目 urls.py
+
+
 
 
 
