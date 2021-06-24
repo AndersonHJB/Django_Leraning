@@ -699,7 +699,7 @@ urlpatterns = [
 
 我们去修改一下吧。
 
-```python
+```html
 <!--joblist.html-->
 {% extends 'base.html' %}
 <meta charset="UTF-8">
@@ -748,6 +748,45 @@ def joblist(request):
 
 
 # 5. 添加自定义页面：让匿名用户可以查看职位详情
+
+```html
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="margin:auto; width:50%;">
+
+{% if job %}
+    <div class="position_name" z>
+        <h2>岗位名称：{{job.job_name}} </h2>
+
+        城市：
+        {{job.city_name}} <p></p>
+    </div>
+    <hr>
+    <div class="position_responsibility" style="width:600px;">
+        <h3>岗位职责：</h3>
+        <pre style="font-size:16px">{{job.job_responsibility}}
+        </pre>
+    </div>
+
+    <hr>
+    <div class="position_requirement" style="width:600px; ">
+        <h3>任职要求：</h3>
+        <pre style="font-size:16px">{{job.job_requirement}}
+        </pre>
+    </div>
+
+    <div class="apply_position">
+        <input type="button" class="btn btn-primary" style="width:120px;" value="申请" onclick="location.href='/resume/add/?apply_position={{job.job_name}}&city={{job.city_name}}'"/>
+    </div>
+{% else %}
+    <p>职位不存在</p>
+{% endif %}
+
+{% endblock %}
+</div>
+```
 
 
 
