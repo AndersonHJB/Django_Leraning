@@ -743,7 +743,13 @@ def joblist(request):
 	return HttpResponse(template.render(context))
 ```
 
-本节代码：
+本节代码：[https://github.com/AndersonHJB/Django_Leraning/tree/main/04-添加自定义页面：让匿名用户可以浏览职位列表页](https://github.com/AndersonHJB/Django_Leraning/tree/main/04-%E6%B7%BB%E5%8A%A0%E8%87%AA%E5%AE%9A%E4%B9%89%E9%A1%B5%E9%9D%A2%EF%BC%9A%E8%AE%A9%E5%8C%BF%E5%90%8D%E7%94%A8%E6%88%B7%E5%8F%AF%E4%BB%A5%E6%B5%8F%E8%A7%88%E8%81%8C%E4%BD%8D%E5%88%97%E8%A1%A8%E9%A1%B5)
+
+
+
+# 5. 
+
+
 
 
 
