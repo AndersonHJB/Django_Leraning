@@ -78,3 +78,56 @@ class Entry(models.Model):
 		return self.headline
 ```
 
+### 2.1 数据库迁移
+
+```python
+python manage.py migrate
+```
+
+### 2.2 创建超级管理员
+
+```python
+(djangoenv) ➜  Webblog git:(main) ✗ python manage.py createsuperuser
+Username (leave blank to use 'apple'): example_uesr
+Email address: example@aiyc.top
+Password:
+Password (again):
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+This password is entirely numeric.
+Bypass password validation and create user anyway? [y/N]: y
+Superuser created successfully.
+```
+
+- 账号：example_user
+- 密码：123123
+
+### 2.3 注册 blog
+
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+	'blog'
+]
+```
+
+### 2.4 注册到 admin
+
+```python
+from django.contrib import admin
+from blog.models import Blog, Author, Entry
+# Register your models here.
+admin.site.register(Blog)
+```
+
+### 2.5 运行数据看迁移
+
+```python
+ python manage.py makemigrations
+```
+
