@@ -34,3 +34,14 @@ django-admin startproject Webblog
 python manage.py runserver
 ```
 
+### 1.6 创建 blog app
+
+```python
+python manage.py startapp blog
+```
+
+## 2. 写入如下代码 models.py
+
+```python
+```
+
