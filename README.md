@@ -788,7 +788,21 @@ def joblist(request):
 </div>
 ```
 
+**补充：**
 
+```python
+>>> from jobs.models import Job
+>>> Job.objects.all()
+<QuerySet [<Job: 音视频工程师>, <Job: Go高级后端开发工程师>]>
+>>> Job.objects.all()[0]
+<Job: 音视频工程师>
+>>> Job.objects.all()[0].id
+1
+>>> Job.objects.get(pk=1)
+<Job: 音视频工程师>
+>>> Job.objects.get(id=1)
+<Job: 音视频工程师>
+```
 
 
 
