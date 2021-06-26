@@ -749,6 +749,8 @@ def joblist(request):
 
 # 5. 添加自定义页面：让匿名用户可以查看职位详情
 
+## 5.1 编写详情页模版
+
 ```html
 {% extends 'base.html' %}
 
@@ -804,9 +806,66 @@ def joblist(request):
 <Job: 音视频工程师>
 ```
 
+```python
+>>> from jobs.models import Job
+>>> Job.objects.get(pk=3)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+  File "/Users/apple/Desktop/GitHub/PyCharm_Coder/Django快速开发实战/recruitment_web/djangoenv/lib/python3.8/site-packages/django/db/models/manager.py", line 85, in managerd
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/apple/Desktop/GitHub/PyCharm_Coder/Django快速开发实战/recruitment_web/djangoenv/lib/python3.8/site-packages/django/db/models/query.py", line 435, in get
+    raise self.model.DoesNotExist(
+jobs.models.Job.DoesNotExist: Job matching query does not exist.
+```
+
+## 5.2 编写 views.py
+
+```python
+from django.http import Http404
+def detail(request, job_id):
+	try:
+		job = Job.objects.get(pk=job_id)
+		job.city_name = Cities[job.job_city][1]  # 工作地点
+	# job.job_type = JobTypes[job.job_type][1]  # 职位类别
+	except Job.DoesNotExist:
+		raise Http404("Job matching query does not exist.")
+	
+	return render(request, 'detail_page_job.html', {'job': job})
+```
+
+## 5.3 编写 url
+
+在写之前，我们要知道，我们上一个 joblist 的页面，定义的 url：
+
+![image-20210626100020712](README.assets/image-20210626100020712.png)
+
+学习链接：[https://docs.djangoproject.com/zh-hans/3.2/topics/http/urls/#using-regular-expressions](https://docs.djangoproject.com/zh-hans/3.2/topics/http/urls/#using-regular-expressions)
+
+所以，我们接下来要定义的就是如下代码：
+
+```python
+from django.urls import path, re_path
+from . import views
+
+urlpatterns = [
+	path('joblist/', views.joblist, name='joblist'),
+	re_path(r'job/(?P<job_id>\d+)/$', views.detail, name='detail')
+]
+```
+
+这里有个地方要注意，我在 models.py 中，的 job_responsibility 原本少了一个 s 大家记得修改后，重新进行数据看迁移。
+
+我们来访问页面查看：
+
+![image-20210626122558178](README.assets/image-20210626122558178.png)
 
 
 
+我们还希望可以返回到上一个页面。我们在 `detail_page_job.html` 添加一行如下代码：
+
+```html
+<a href="/joblist" style="color: blue">返回职位列表</a>
+```
 
 
 
