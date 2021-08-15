@@ -87,7 +87,7 @@ python manage.py createsuperuser
 | DATABASES          | 数据库引擎                                                   |
 | LANGUAGE_CODE      | 语言                                                         |
 
-**代码链接：**[https://github.com/AndersonHJB/Django_Leraning/tree/main/1-使用Django创建第一个项目](https://github.com/AndersonHJB/Django_Leraning/tree/main/1-使用Django创建第一个项目)
+**代码链接：**[https://github.com/AndersonHJB/Django_Leraning/tree/main/01-使用Django创建第一个项目](https://github.com/AndersonHJB/Django_Leraning/tree/main/01-使用Django创建第一个项目)
 
 
 
