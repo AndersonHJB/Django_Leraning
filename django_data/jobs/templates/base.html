@@ -1,0 +1,59 @@
+<!--jobs/templates/base.html-->
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{% load i18n %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<h3 > {% translate "匠果科技开放职位" %} </h3>
+
+{% block header %}
+<div style="margin-left: 5px;display: -webkit-flex;display: flex;">
+    
+  <div style="flex: 4; ">
+<a href="/" style="text-decoration: none; color:#007bff">{% translate "Homepage" %}</a>
+<a href="/joblist" style="text-decoration: none; color:#007bff">{% translate "job list" %}</a>
+
+{% if user.is_authenticated %}
+<a href="/accounts/logout" style="text-decoration: none; color:#007bff">{% translate "Logout" %}</a>
+{% else %}
+<a href="/accounts/login" style="text-decoration: none; color:#007bff">{% translate "Login" %}</a>
+{% endif %}
+
+{% if user.is_authenticated %}
+<p>{% blocktranslate with user_name=user.username %} 终于等到你 {{ user_name }}, 期待加入我们，用技术去探索一个新世界 {% endblocktranslate %}</p>
+{% else %}
+<br>{% translate "欢迎你，期待加入我们，登陆后可以提交简历." %}<br>
+{% endif %}
+  </div>
+
+<div style="flex: 1; align-content:right;">
+<form action="{% url 'set_language' %}" method="post" style="margin-block-end: 0em;">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}">
+    <select name="language">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                {{ language.name_local }} ({{ language.code }})
+            </option>
+        {% endfor %}
+    </select>
+
+	<input type="submit" value={% translate "Switch" %} style="font-size:12;height:20px">
+</form>
+</div>
+</div>
+<hr style="margin-top: 0px; ">
+{% endblock %}
+
+{% block content %}
+{% endblock %}

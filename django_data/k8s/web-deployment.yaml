@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.16.0 (0c01309)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web
+  name: web
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: django-recruitment
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: web
+        app: django-recruitment
+    spec:
+      containers:
+      - args:
+        - /bin/sh
+        - /data/recruitment/start.production.bat
+        env:
+        - name: server_params
+          value: --settings=settings.production
+        ### variables from kubernetes secret
+        - name: DINGTALK_WEB_HOOK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: recruitment-secrets
+              key: DINGTALK_WEB_HOOK_TOKEN
+        - name: DJANGO_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: recruitment-secrets
+              key: DJANGO_SECRET_KEY
+        - name: LDAP_AUTH_URL
+          valueFrom:
+            secretKeyRef:
+              name: recruitment-secrets
+              key: LDAP_AUTH_URL
+        - name: LDAP_AUTH_CONNECTION_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: recruitment-secrets
+              key: LDAP_AUTH_CONNECTION_USERNAME
+        - name: LDAP_AUTH_CONNECTION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: recruitment-secrets
+              key: LDAP_AUTH_CONNECTION_PASSWORD
+        - name: OSS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: recruitment-secrets
+              key: OSS_ACCESS_KEY_ID
+        - name: OSS_ACCESS_KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: recruitment-secrets
+              key: OSS_ACCESS_KEY_SECRET
+        ######### environment variables for logtail to SLS ###########
+        - name: aliyun_logs_recruitment-web
+          value: stdout
+        - name: aliyun_logs_recruitment-web
+          value: /data/logs/recruitment/*.log
+        - name: aliyun_logs_mytag1_tags
+          value: tag1=v1
+        image: registry.cn-beijing.aliyuncs.com/ihopeit/django-recruitment:{{BUILD_NUMBER}}
+        imagePullPolicy: Always
+        name: recruitment-web
+        ports:
+        - containerPort: 8000
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/logs/recruitment
+          name: web-claim0
+      restartPolicy: Always
+      volumes:
+      - name: web-claim0
+        persistentVolumeClaim:
+          claimName: web-claim0
+status: {}
