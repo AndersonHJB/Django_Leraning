@@ -252,7 +252,7 @@ Quit the server with CONTROL-C.
 
 还有就是不太好的地方就是上图红色框中的名称，还是默认的并不是我们的职位名称。
 
-**代码链接：**[https://github.com/AndersonHJB/Django_Leraning/tree/main/2-10分钟如何创建一个可以管理职位的后台](https://github.com/AndersonHJB/Django_Leraning/tree/main/2-10分钟如何创建一个可以管理职位的后台)
+**代码链接：**[https://github.com/AndersonHJB/Django_Leraning/tree/main/02-10分钟如何创建一个可以管理职位的后台](https://github.com/AndersonHJB/Django_Leraning/tree/main/02-10分钟如何创建一个可以管理职位的后台)
 
 
 
